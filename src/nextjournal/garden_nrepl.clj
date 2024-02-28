@@ -12,7 +12,7 @@
 
 (defn start-nrepl! []
   (let [nrepl-server (nrepl/start-server {:bind "0.0.0.0"
-                                          :port (some-> (System/getenv "GARDEN_NREPL_PORT") parse-long)
+                                          :port (some-> (System/getenv "GARDEN_NREPL_PORT") Integer/parseInt)
                                           :handler cider/cider-nrepl-handler})
         addr (.. (:server-socket nrepl-server)
                  (getInetAddress)
