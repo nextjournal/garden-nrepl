@@ -7,7 +7,9 @@
 (defn deps-edn [] (edn/read (java.io.PushbackReader. (io/reader "deps.edn"))))
 
 (defn start-app! [opts]
-  (let [{:keys [exec-fn exec-args]} (get-in (deps-edn) [:aliases :nextjournal/garden])]
+  (let [{:as garden-alias :keys [exec-fn exec-args]} (get-in (deps-edn) [:aliases :nextjournal/garden])]
+    (when-not (symbol? exec-fn)
+      (throw (ex-info "No :exec-fn under :nextjournal/garden alias in deps.edn" garden-alias)))
     ((requiring-resolve exec-fn) (merge exec-args opts))))
 
 (defn start-nrepl! []
